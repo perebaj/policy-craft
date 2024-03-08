@@ -1,17 +1,19 @@
-import "reactflow/dist/style.css";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import ReactFlow, { Background } from "reactflow";
-import { AddNodeEdge } from "./AddNodeEdge";
-import { CurrentDrawer } from "./Drawers";
-import { EditorProvider } from "./Editor";
-import { GraphProvider, graph } from "./Graph";
-import { allNodes } from "./Nodes";
-import { generateEdge, generateNode } from "./nodeGeneration";
-import { positionNodes } from "./positionNodes";
+import 'reactflow/dist/style.css'
+
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import ReactFlow, { Background } from 'reactflow'
+
+import { AddNodeEdge } from './AddNodeEdge'
+import { CurrentDrawer } from './Drawers'
+import { EditorProvider } from './Editor'
+import { graph, GraphProvider } from './Graph'
+import { generateEdge, generateNode } from './nodeGeneration'
+import { allNodes } from './Nodes'
+import { positionNodes } from './positionNodes'
 
 const edgeTypes = {
-  "add-node": AddNodeEdge,
-};
+  'add-node': AddNodeEdge,
+}
 
 function ReactFlowSandbox() {
   const {
@@ -22,52 +24,52 @@ function ReactFlowSandbox() {
     fitZoomToGraph,
     setNodes,
     setEdges,
-  } = useContext(graph);
+  } = useContext(graph)
 
-  const [centeredGraphAtStart, setCenteredGraphAtStart] = useState(false);
-  const reactFlowRef = useRef<HTMLDivElement>(null);
+  const [centeredGraphAtStart, setCenteredGraphAtStart] = useState(false)
+  const reactFlowRef = useRef<HTMLDivElement>(null)
 
   const tryCenteringGraph = useCallback(() => {
     if (centeredGraphAtStart) {
-      return;
+      return
     }
 
-    fitZoomToGraph(reactFlowRef);
+    fitZoomToGraph(reactFlowRef)
 
-    const viewport = reactFlowInstance?.getViewport();
+    const viewport = reactFlowInstance?.getViewport()
     if (viewport && viewport.x !== 0 && viewport.y !== 0) {
-      return setCenteredGraphAtStart(true);
+      return setCenteredGraphAtStart(true)
     }
 
-    const retryTimeInMs = 50;
-    setTimeout(() => tryCenteringGraph(), retryTimeInMs);
-  }, [centeredGraphAtStart, fitZoomToGraph, reactFlowInstance]);
+    const retryTimeInMs = 50
+    setTimeout(() => tryCenteringGraph(), retryTimeInMs)
+  }, [centeredGraphAtStart, fitZoomToGraph, reactFlowInstance])
 
   useEffect(() => {
-    tryCenteringGraph();
-  }, [tryCenteringGraph]);
+    tryCenteringGraph()
+  }, [tryCenteringGraph])
 
   useEffect(() => {
     const initialNodes = [
-      generateNode({ nodeName: "start", id: "start" }),
-      generateNode({ nodeName: "end" }),
-    ];
+      generateNode({ nodeName: 'start', id: 'start' }),
+      generateNode({ nodeName: 'end' }),
+    ]
     const initialEdges = [
       generateEdge({
-        source: "start",
+        source: 'start',
         target: initialNodes[1].id,
       }),
-    ];
+    ]
     const [positionedNodes, positionedEdges] = positionNodes(
       initialNodes,
-      initialEdges
-    );
-    setNodes(positionedNodes);
-    setEdges(positionedEdges);
-  }, []);
+      initialEdges,
+    )
+    setNodes(positionedNodes)
+    setEdges(positionedEdges)
+  }, [setEdges, setNodes])
 
   return (
-    <div className="h-full flex flex-col overflow-hidden w-full relative">
+    <div className="relative flex h-full w-full flex-col overflow-hidden">
       <ReactFlow
         ref={reactFlowRef}
         nodes={nodes}
@@ -82,7 +84,7 @@ function ReactFlowSandbox() {
       </ReactFlow>
       <CurrentDrawer />
     </div>
-  );
+  )
 }
 
 export function GraphEditor() {
@@ -92,5 +94,5 @@ export function GraphEditor() {
         <ReactFlowSandbox />
       </GraphProvider>
     </EditorProvider>
-  );
+  )
 }

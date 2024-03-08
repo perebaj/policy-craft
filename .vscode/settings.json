@@ -1,0 +1,10 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "eslint.nodePath": "./frontend/node_modules",
+    "eslint.workingDirectories": [
+        "./frontend"
+    ]
+}

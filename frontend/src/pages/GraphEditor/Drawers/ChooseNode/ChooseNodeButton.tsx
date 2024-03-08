@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 
 type ChooseNodeButtonProps = {
-  label: string;
-  preview: ReactNode;
-  onClick: () => void;
-};
+  label: string
+  preview: ReactNode
+  onClick: () => void
+}
 
 export const ChooseNodeButton = ({
   label,
@@ -12,12 +12,12 @@ export const ChooseNodeButton = ({
   onClick,
 }: ChooseNodeButtonProps) => (
   <button
-    className="group flex shadow-small shadow-neutral-300 flex-col items-center justify-center p-2 rounded-md bg-white hover-focus:bg-N-300 cursor-pointer border-N-500 border"
+    className="group flex cursor-pointer flex-col items-center justify-center rounded-md border border-N-500 bg-white p-2 shadow-small shadow-neutral-300 hover-focus:bg-N-300"
     onClick={onClick}
   >
-    <div className="h-20 w-20 flex items-center">{preview}</div>
-    <div className="font-lato text-center font-medium group-hover-focus:font-medium mt-3 flex">
+    <div className="flex h-20 w-20 items-center">{preview}</div>
+    <div className="font-lato mt-3 flex text-center font-medium group-hover-focus:font-medium">
       <p>{label}</p>
     </div>
   </button>
-);
+)

@@ -1,17 +1,17 @@
-import { Handle, NodeProps, Position } from "reactflow";
+import { Handle, NodeProps, Position } from 'reactflow'
 
-import { NodeWrapper } from "./NodeWrapper";
+import { NodeWrapper } from './NodeWrapper'
 
 type EndNodeData = {
-  width: number;
-  height: number;
-};
+  width: number
+  height: number
+}
 
 export function EndNode({ data }: NodeProps<EndNodeData>) {
   return (
     <NodeWrapper>
       <div
-        className={`rounded-full aspect-square flex items-center justify-center border-4 border-N-400 h-full bg-white text-[12px] cursor-pointer`}
+        className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 border-N-400 bg-white text-[12px]`}
         style={{
           width: data.width,
           height: data.height,
@@ -24,8 +24,8 @@ export function EndNode({ data }: NodeProps<EndNodeData>) {
           position={Position.Top}
           isConnectable={false}
         />
-        <p className="font-medium">{"End"}</p>
+        <p className="font-medium">{'End'}</p>
       </div>
     </NodeWrapper>
-  );
+  )
 }
