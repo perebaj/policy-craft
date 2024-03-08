@@ -10,7 +10,6 @@ import { graph, GraphProvider } from './Graph'
 import { generateEdge, generateNode } from './nodeGeneration'
 import { allNodes } from './Nodes'
 import { positionNodes } from './positionNodes'
-
 const edgeTypes = {
   'add-node': AddNodeEdge,
 }

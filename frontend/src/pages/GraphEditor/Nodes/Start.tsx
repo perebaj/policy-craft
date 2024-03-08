@@ -11,7 +11,7 @@ export function StartNode({ data }: NodeProps<StartNodeData>) {
   return (
     <NodeWrapper>
       <div
-        className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 border-N-400 bg-white text-[12px]`}
+        className={`border-N-400 flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 bg-white text-[12px]`}
         style={{
           width: data.width,
           height: data.height,
