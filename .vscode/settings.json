@@ -3,6 +3,7 @@
         "source.fixAll.eslint": "explicit"
     },
     "editor.formatOnSave": true,
+    // The eslint config for a monorepo is important here to IDEs recognize the correct paths
     "eslint.nodePath": "./frontend/node_modules",
     "eslint.workingDirectories": [
         "./frontend"
