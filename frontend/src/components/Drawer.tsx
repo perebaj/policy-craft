@@ -52,7 +52,7 @@ const CustomDrawer = ({ title, content, onClose, visible }: DrawerProps) => {
           data-drawer-hide="drawer-close-button"
           aria-controls="drawer-close-button"
           onClick={onClose}
-          className="absolute right-2.5 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover-focus:bg-gray-200 hover-focus:text-black"
+          className="hover-focus:bg-gray-200 hover-focus:text-black absolute right-2.5 flex h-8 w-8 items-center justify-center rounded-full text-gray-500"
           tabIndex={visible ? 0 : -1}
         >
           <ChevronDoubleRightIcon className="w-6" />

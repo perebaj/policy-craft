@@ -22,7 +22,7 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
       >
         <div className="relative flex h-full w-full  items-center justify-center p-9 text-center text-[12px]">
           <div
-            className={`absolute left-0 top-0 z-0 h-full w-full text-orange-300 group-hover:text-orange-300 group-hover-focus:cursor-pointer [&>svg]:stroke-orange-400`}
+            className={`group-hover-focus:cursor-pointer absolute left-0 top-0 z-0 h-full w-full text-orange-300 group-hover:text-orange-300 [&>svg]:stroke-orange-400`}
           >
             <DiamondSvg strokeWidth={4} />
           </div>
