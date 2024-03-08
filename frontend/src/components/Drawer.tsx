@@ -8,8 +8,8 @@ type DrawerProps = {
   visible: boolean
   onClose?: () => void
 }
-
 // Arbitrary value.
+
 export const DRAWER_ANIMATION_IN_SECONDS = 0.3
 export const DRAWER_ANIMATION_IN_MILLISECONDS =
   DRAWER_ANIMATION_IN_SECONDS * 1000
