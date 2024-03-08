@@ -13,6 +13,10 @@ start:
 lint:
 	npx eslint .
 
+.PHONY: build
+build:
+	npm run build
+
 ## Display help for all targets
 .PHONY: help
 help:
