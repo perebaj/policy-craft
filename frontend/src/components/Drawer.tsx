@@ -26,7 +26,7 @@ const CustomDrawer = ({ title, content, onClose, visible }: DrawerProps) => {
 
   return (
     <motion.div
-      className={`border-border-normal bg-N-100 fixed right-0 z-40 h-full w-2/5 overflow-y-auto border-l-2 p-4`}
+      className={`border-border-normal fixed right-0 z-40 h-full w-2/5 overflow-y-auto border-l-2 bg-slate-100 p-4`}
       animate={{
         x: visible ? '0' : '100%',
       }}

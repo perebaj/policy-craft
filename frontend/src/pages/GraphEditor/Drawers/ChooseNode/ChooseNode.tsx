@@ -38,7 +38,7 @@ export const ChooseNodeDrawer = ({
           <div className="grid grid-cols-2 gap-4">
             <ChooseNodeButton
               preview={
-                <DiamondSvg className="stroke-Y-350 stroke-4 text-Y-300 h-12 w-20" />
+                <DiamondSvg className="stroke-4 h-12 w-20 stroke-orange-400 text-orange-300" />
               }
               label="Conditional"
               onClick={() => onButtonClick('conditional')}
