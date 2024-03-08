@@ -1,13 +1,13 @@
-import { PropsWithChildren, memo } from "react";
+import { memo, PropsWithChildren } from 'react'
 
 const BaseWrapper = ({ children }: PropsWithChildren) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center group/container font-lato`}
+      className={`group/container font-lato flex flex-col items-center justify-center`}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
-export const NodeWrapper = memo(BaseWrapper);
+export const NodeWrapper = memo(BaseWrapper)

@@ -1,8 +1,8 @@
-import { GraphEditor } from "./GraphEditor/GraphEditor";
+import { GraphEditor } from './GraphEditor/GraphEditor'
 
 export default [
   {
-    path: "/",
+    path: '/',
     element: <GraphEditor />,
   },
-];
+]

@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const DiamondSvg = (props?: SVGProps<SVGSVGElement>) => {
   return (
@@ -17,5 +17,5 @@ export const DiamondSvg = (props?: SVGProps<SVGSVGElement>) => {
     >
       <path d="M 0 50 L 50 100 L 100 50 L 50 0 z" fill="currentColor" />
     </svg>
-  );
-};
+  )
+}

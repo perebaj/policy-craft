@@ -1,67 +1,64 @@
-/* eslint-disable react-refresh/only-export-components */
 import {
+  createContext,
   Dispatch,
   PropsWithChildren,
   RefObject,
   SetStateAction,
-  createContext,
   useCallback,
   useContext,
   useState,
-} from "react";
+} from 'react'
 import {
   Edge,
   Node,
   ReactFlowInstance,
   useEdgesState,
   useNodesState,
-} from "reactflow";
-import { editor } from "./Editor";
-import {
-  getNodeDimensions,
-  insertNodeAfterEdge,
-} from "./nodeGeneration";
-import { NodeName } from "./Nodes";
-import { positionNodes } from "./positionNodes";
+} from 'reactflow'
+
+import { editor } from './Editor'
+import { getNodeDimensions, insertNodeAfterEdge } from './nodeGeneration'
+import { NodeName } from './Nodes'
+import { positionNodes } from './positionNodes'
 
 export type Graph = {
-  nodes: Node[];
-  edges: Edge[];
-  setNodes: Dispatch<SetStateAction<Node[]>>;
-  setEdges: Dispatch<SetStateAction<Edge[]>>;
-  addNodeAfterEdge: (params: { nodeName: NodeName; edge: Edge }) => void;
-  reactFlowInstance: ReactFlowInstance | null;
-  setReactFlowInstance: Dispatch<SetStateAction<ReactFlowInstance | null>>;
-  fitZoomToGraph: (reactFlowRef: RefObject<HTMLDivElement>) => void;
-};
+  nodes: Node[]
+  edges: Edge[]
+  setNodes: Dispatch<SetStateAction<Node[]>>
+  setEdges: Dispatch<SetStateAction<Edge[]>>
+  addNodeAfterEdge: (params: { nodeName: NodeName; edge: Edge }) => void
+  reactFlowInstance: ReactFlowInstance | null
+  setReactFlowInstance: Dispatch<SetStateAction<ReactFlowInstance | null>>
+  fitZoomToGraph: (reactFlowRef: RefObject<HTMLDivElement>) => void
+}
 
-export const graph = createContext({} as Graph);
+export const graph = createContext({} as Graph)
 
 // "Big" is arbitrary, and in this context it is used to define if a graph zoom
 // should focus on the entire graph or only at the beginning of it (start block part).
-const arbitraryBigHeight = 1000;
+const arbitraryBigHeight = 1000
 
 export function GraphProvider({ children }: PropsWithChildren) {
   const [reactFlowInstance, setReactFlowInstance] =
-    useState<Graph["reactFlowInstance"]>(null);
-  const [nodes, setNodes] = useNodesState([]);
-  const [edges, setEdges] = useEdgesState([]);
-  const { closeEditorDrawer } = useContext(editor);
+    useState<Graph['reactFlowInstance']>(null)
+  const [nodes, setNodes] = useNodesState([])
+  const [edges, setEdges] = useEdgesState([])
+  const { closeEditorDrawer } = useContext(editor)
 
-  const { drawerVisible } = useContext(editor);
+  const { drawerVisible } = useContext(editor)
 
   const positionElements = useCallback(
     (nodes: Node[], edges: Edge[]) => {
-      const [positionedNodes, positionedEdges] = positionNodes(nodes, edges);
-      setNodes(positionedNodes);
-      setEdges(positionedEdges);
+      const [positionedNodes, positionedEdges] = positionNodes(nodes, edges)
+      setNodes(positionedNodes)
+      setEdges(positionedEdges)
     },
-    [setNodes, setEdges]
-  );
+    [setNodes, setEdges],
+  )
 
-  const addNodeAfterEdge: Graph["addNodeAfterEdge"] = ({ nodeName, edge }) => {
+  const addNodeAfterEdge: Graph['addNodeAfterEdge'] = ({ nodeName, edge }) => {
     if (!edge) {
-      return;
+      return
     }
 
     const { nodes: updatedNodes, edges: updatedEdges } = insertNodeAfterEdge({
@@ -69,45 +66,45 @@ export function GraphProvider({ children }: PropsWithChildren) {
       nodeName,
       nodes,
       edges,
-    });
+    })
 
-    closeEditorDrawer();
+    closeEditorDrawer()
 
-    positionElements(updatedNodes, updatedEdges);
-  };
+    positionElements(updatedNodes, updatedEdges)
+  }
 
   function fitZoomToGraph(reactFlowRef: RefObject<HTMLDivElement>) {
     const graphHeight = nodes.reduce((biggestHeight, node) => {
-      const graphHeightTillNode = node.position.y;
+      const graphHeightTillNode = node.position.y
       if (graphHeightTillNode > biggestHeight) {
-        biggestHeight = graphHeightTillNode;
+        biggestHeight = graphHeightTillNode
       }
-      return biggestHeight;
-    }, 0);
+      return biggestHeight
+    }, 0)
 
     if (!reactFlowRef.current) {
-      return;
+      return
     }
 
     if (graphHeight < arbitraryBigHeight) {
-      reactFlowInstance?.fitView();
-      return;
+      reactFlowInstance?.fitView()
+      return
     }
 
-    const startNodeWidth = getNodeDimensions("start").width;
+    const startNodeWidth = getNodeDimensions('start').width
     const editorWidth =
-      reactFlowRef.current.clientWidth * (drawerVisible ? 0.6 : 1);
+      reactFlowRef.current.clientWidth * (drawerVisible ? 0.6 : 1)
 
-    const positionThatCentersStartNode = editorWidth / 2 - startNodeWidth / 2;
+    const positionThatCentersStartNode = editorWidth / 2 - startNodeWidth / 2
 
-    const arbitraryTopPosition = 40;
-    const arbitraryZoom = 0.8;
+    const arbitraryTopPosition = 40
+    const arbitraryZoom = 0.8
 
     reactFlowInstance?.setViewport({
       x: positionThatCentersStartNode,
       y: arbitraryTopPosition,
       zoom: arbitraryZoom,
-    });
+    })
   }
 
   return (
@@ -125,5 +122,5 @@ export function GraphProvider({ children }: PropsWithChildren) {
     >
       {children}
     </graph.Provider>
-  );
+  )
 }
