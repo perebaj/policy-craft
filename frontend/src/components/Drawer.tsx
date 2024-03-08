@@ -26,7 +26,7 @@ const CustomDrawer = ({ title, content, onClose, visible }: DrawerProps) => {
 
   return (
     <motion.div
-      className={`border-border-normal bg-N-100 fixed right-0 z-40 h-full w-2/5 overflow-y-auto border-l-2 p-4`}
+      className={`border-border-normal fixed right-0 z-40 h-full w-2/5 overflow-y-auto border-l-2 bg-slate-100 p-4`}
       animate={{
         x: visible ? '0' : '100%',
       }}
@@ -52,7 +52,7 @@ const CustomDrawer = ({ title, content, onClose, visible }: DrawerProps) => {
           data-drawer-hide="drawer-close-button"
           aria-controls="drawer-close-button"
           onClick={onClose}
-          className="hover-focus:bg-gray-200 hover-focus:text-black absolute right-2.5 flex h-8 w-8 items-center justify-center rounded-full text-gray-500"
+          className="absolute right-2.5 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover-focus:bg-gray-200 hover-focus:text-black"
           tabIndex={visible ? 0 : -1}
         >
           <ChevronDoubleRightIcon className="w-6" />

@@ -79,7 +79,7 @@ function ReactFlowSandbox() {
         nodesDraggable={false}
         deleteKeyCode={null}
       >
-        <Background className="bg-N-75" size={2} color="#C1C4D6" />
+        <Background className="bg-slate-50" size={2} color="#C1C4D6" />
       </ReactFlow>
       <CurrentDrawer />
     </div>
