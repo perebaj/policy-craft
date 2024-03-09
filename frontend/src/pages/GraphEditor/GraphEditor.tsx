@@ -1,7 +1,7 @@
 import 'reactflow/dist/style.css'
 
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import ReactFlow, { Background } from 'reactflow'
+import ReactFlow, { Background, Controls, MiniMap } from 'reactflow'
 
 import { AddNodeEdge } from './AddNodeEdge'
 import { CurrentDrawer } from './Drawers'
@@ -80,6 +80,8 @@ function ReactFlowSandbox() {
         deleteKeyCode={null}
       >
         <Background className="bg-slate-50" size={2} color="#C1C4D6" />
+        <MiniMap />
+        <Controls />
       </ReactFlow>
       <CurrentDrawer />
     </div>
