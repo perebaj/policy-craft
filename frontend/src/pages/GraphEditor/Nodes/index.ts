@@ -1,4 +1,5 @@
 import { ConditionalNode } from './Conditional'
+import { DecisionNode } from './Decision'
 import { EndNode } from './End'
 import { StartNode } from './Start'
 
@@ -13,6 +14,7 @@ export type UserAddableNodeName = keyof typeof userAddableNodes
 const automaticNodes = {
   start: StartNode,
   end: EndNode,
+  decision: DecisionNode,
 }
 export type AutomaticNodeName = keyof typeof automaticNodes
 

@@ -49,14 +49,24 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
       const newConditionalNode = generateNode({
         nodeName: 'conditional',
         data: {
-          label: 'Edge Name',
+          label: 'Node Name',
         },
+      })
+
+      const newDecisionNode = generateNode({
+        nodeName: 'decision',
       })
 
       const newEdges = [
         generateEdge({
           source: newConditionalNode.id,
+          target: newDecisionNode.id,
+          label: 'decision-false',
+        }),
+        generateEdge({
+          source: newConditionalNode.id,
           target: edge.target,
+          label: 'False',
         }),
       ]
 
@@ -67,7 +77,7 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
         return e
       })
 
-      const newNodes = [newConditionalNode]
+      const newNodes = [newConditionalNode, newDecisionNode]
       addedNode = newConditionalNode
       returnNodes = [...nodes, ...newNodes]
       returnEdges = [...updatedExistingEdges, ...newEdges]
