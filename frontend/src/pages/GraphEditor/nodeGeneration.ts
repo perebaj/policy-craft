@@ -49,7 +49,7 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
       const newConditionalNode = generateNode({
         nodeName: 'conditional',
         data: {
-          label: '',
+          label: 'Edge Name',
         },
       })
 
@@ -57,7 +57,6 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
         generateEdge({
           source: newConditionalNode.id,
           target: edge.target,
-          label: 'True',
         }),
       ]
 
