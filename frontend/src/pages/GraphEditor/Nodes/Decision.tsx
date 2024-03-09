@@ -21,7 +21,7 @@ export function DecisionNode({ data }: NodeProps<DecisionNodeData>) {
           type="target"
           id="decision"
           className="invisible"
-          position={Position.Right}
+          position={Position.Top}
           isConnectable={false}
         />
         <p className="font-medium">{'False'}</p>

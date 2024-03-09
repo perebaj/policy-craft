@@ -61,7 +61,7 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
         generateEdge({
           source: newConditionalNode.id,
           target: newDecisionNode.id,
-          label: 'True',
+          label: 'decision-false',
         }),
         generateEdge({
           source: newConditionalNode.id,

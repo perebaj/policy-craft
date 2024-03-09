@@ -52,22 +52,27 @@ export function AddNodeEdge({
         markerEnd={markerEnd}
         style={{ pointerEvents: 'none', strokeWidth: 2 }}
       />
-      <EdgeLabelRenderer>
-        <div
-          style={{
-            transform: `translate(-50%, -50%) translate(${centerX}px,${centerY}px)`,
-            pointerEvents: 'all',
-          }}
-          className="absolute h-4 w-4 rounded-full text-black"
-        >
-          <button
-            onClick={(event) => onEdgeClick(event, id)}
-            className={`shadow-sm-light hover-focus:border-slate-900 hover-focus:bg-black group absolute flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-teal-400 shadow-gray-300 transition-colors duration-300`}
-          >
-            <PlusCircleIcon className="group-hover-focus:bg-slate-900 group-hover-focus:text-teal-300 absolute w-[130%] bg-white text-teal-500 transition-colors duration-300" />
-          </button>
-        </div>
-      </EdgeLabelRenderer>
+      {
+        // To avoid iconsistent policies, the label is only show if it is not the "decision-false" label.
+        label !== 'decision-false' && (
+          <EdgeLabelRenderer>
+            <div
+              style={{
+                transform: `translate(-50%, -50%) translate(${centerX}px,${centerY}px)`,
+                pointerEvents: 'all',
+              }}
+              className="absolute h-4 w-4 rounded-full text-black"
+            >
+              <button
+                onClick={(event) => onEdgeClick(event, id)}
+                className={`shadow-sm-light hover-focus:border-slate-900 hover-focus:bg-black group absolute flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-teal-400 shadow-gray-300 transition-colors duration-300`}
+              >
+                <PlusCircleIcon className="group-hover-focus:bg-slate-900 group-hover-focus:text-teal-300 absolute w-[130%] bg-white text-teal-500 transition-colors duration-300" />
+              </button>
+            </div>
+          </EdgeLabelRenderer>
+        )
+      }
     </>
   )
 }
