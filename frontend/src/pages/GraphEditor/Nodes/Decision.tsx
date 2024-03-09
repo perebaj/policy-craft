@@ -7,6 +7,7 @@ type DecisionNodeData = {
   height: number
 }
 
+// DecisionNode can't be created by the user, only automatically. It represents the failure of a conditional node.
 export function DecisionNode({ data }: NodeProps<DecisionNodeData>) {
   return (
     <NodeWrapper>
