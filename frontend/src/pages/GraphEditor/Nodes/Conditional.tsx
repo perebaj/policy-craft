@@ -47,7 +47,7 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
             {/* <Button variant="outline">Edit </Button> */}
             <div className="relative flex h-full w-full  items-center justify-center p-9 text-center text-[12px]">
               <div
-                className={`group-hover-focus:cursor-pointer absolute left-0 top-0 z-0 h-full w-full text-cyan-400 hover:cursor-pointer group-hover:text-cyan-400/80 [&>svg]:stroke-cyan-500`}
+                className={`absolute left-0 top-0 z-0 h-full w-full text-cyan-400 hover:cursor-pointer group-hover:text-cyan-400/80 group-hover-focus:cursor-pointer [&>svg]:stroke-cyan-500`}
               >
                 <DiamondSvg strokeWidth={4} />
               </div>
@@ -73,7 +73,7 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
           <DialogHeader>
             <DialogTitle>Edit your conditional component</DialogTitle>
             <DialogDescription>
-              Makes changes to your conditional component. Click save when you
+              Make changes to your conditional component. Click save when you
               are done.
             </DialogDescription>
           </DialogHeader>
