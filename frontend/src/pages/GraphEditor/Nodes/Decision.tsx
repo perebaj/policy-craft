@@ -12,9 +12,9 @@ export function DecisionNode({ data }: NodeProps<DecisionNodeData>) {
   return (
     <NodeWrapper>
       <div
-        className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 border-red-300 bg-white text-[12px]`}
+        className={`flex h-full items-center justify-center rounded-lg border-4 border-red-300 bg-white text-[12px]`}
         style={{
-          width: data.width,
+          width: data.width * 1.5,
           height: data.height,
         }}
       >
@@ -25,7 +25,7 @@ export function DecisionNode({ data }: NodeProps<DecisionNodeData>) {
           position={Position.Top}
           isConnectable={false}
         />
-        <p className="font-medium">{'False'}</p>
+        <p className="font-medium">{'Decision'}</p>
       </div>
     </NodeWrapper>
   )

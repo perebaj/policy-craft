@@ -11,7 +11,7 @@ export function EndNode({ data }: NodeProps<EndNodeData>) {
   return (
     <NodeWrapper>
       <div
-        className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 border-slate-300 bg-white text-[12px]`}
+        className={`flex aspect-square h-full items-center justify-center rounded-full border-4 border-green-300 bg-white text-[12px]`}
         style={{
           width: data.width,
           height: data.height,
