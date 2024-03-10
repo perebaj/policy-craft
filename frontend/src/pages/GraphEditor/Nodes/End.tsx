@@ -11,7 +11,7 @@ export function EndNode({ data }: NodeProps<EndNodeData>) {
   return (
     <NodeWrapper>
       <div
-        className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border-4 border-slate-300 bg-white text-[12px]`}
+        className={`flex aspect-square h-full items-center justify-center rounded-full border-4 border-green-300 bg-white text-[12px]`}
         style={{
           width: data.width,
           height: data.height,
@@ -24,7 +24,7 @@ export function EndNode({ data }: NodeProps<EndNodeData>) {
           position={Position.Top}
           isConnectable={false}
         />
-        <p className="font-medium">{'End'}</p>
+        <p className="text-center text-xs font-medium">{'Decision true'}</p>
       </div>
     </NodeWrapper>
   )

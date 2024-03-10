@@ -61,12 +61,13 @@ export function insertNodeAfterEdge<SelectedNodeName extends NodeName>({
         generateEdge({
           source: newConditionalNode.id,
           target: newDecisionNode.id,
-          label: 'decision-false',
+          // This label is used to determine if the button to add a new node will be rendered or not.
+          label: 'false',
         }),
         generateEdge({
           source: newConditionalNode.id,
           target: edge.target,
-          label: 'False',
+          label: 'true',
         }),
       ]
 
