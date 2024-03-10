@@ -1,0 +1,24 @@
+# Dockerfile.dev is used in development environment.
+# The difference between Dockerfile and Dockerfile.dev is that Dockerfile.dev don't start the web server,
+# so here, you can run your tests, linters, debug, all using the same environment that will be used in production, but in a wrapped way.
+ARG PYTHON_VERSION
+
+FROM python:${PYTHON_VERSION}-buster
+
+ARG POETRY_VERSION
+
+RUN pip install poetry==${POETRY_VERSION}
+
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
+
+# as default, poetry creates a virtual environment for the project, as we are using docker, we don't need it
+RUN poetry config virtualenvs.create false
+# --no-dev> don't install dev dependencies
+# --no-interaction> don't ask for user input
+RUN poetry install --no-dev --no-interaction
+
+EXPOSE 8000
+
+COPY . /app

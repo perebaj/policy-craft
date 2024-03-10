@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  policycraft:
+    image: policy-craft:dev
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+      args:
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        POETRY_VERSION: ${POETRY_VERSION}
+    environment:
+      POLICYCRAFT_POSTGRES_URL: postgres://postgres:postgres@postgres:5432/contractus?sslmode=disable
+    volumes:
+      - .:/app/src
+    ports:
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: poetry run uvicorn src.main:app --reload --port 8000
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: policycraft
+    volumes:
+      - db:/var/lib/postgresql/data
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      timeout: 3s
+      retries: 5
+volumes:
+  db:
