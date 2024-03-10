@@ -69,7 +69,7 @@ dev/clean:
 	@echo "Cleaning containers, images and volumes..."
 	@docker-compose down --rmi all --volumes --remove-orphans
 
-## Print the IP of the running container
+## Print the IP of the running container to access the service
 .PHONY: ip
 ip:
 	$(eval IP := $(shell docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' backend_policycraft_1))
