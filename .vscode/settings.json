@@ -7,5 +7,7 @@
     "eslint.nodePath": "./frontend/node_modules",
     "eslint.workingDirectories": [
         "./frontend"
-    ]
+    ],
+    // The python interpreter path is important here to IDEs recognize the correct paths and packages
+    "python.defaultInterpreterPath": "./backend/.venv/bin/python"
 }
