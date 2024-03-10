@@ -53,7 +53,7 @@ export function AddNodeEdge({
         style={{ pointerEvents: 'none', strokeWidth: 2 }}
       />
       {
-        // To avoid iconsistent policies, the label is only show if it is not the "decision-false" label.
+        // To avoid iconsistent policies, the label is only show if it is not the "false" label.
         label !== 'false' && (
           <EdgeLabelRenderer>
             <div

@@ -1,5 +1,6 @@
 import { DiamondSvg } from 'assets/Diamond'
 import * as React from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 import { cn } from '@/lib/utils'
@@ -30,6 +31,8 @@ export type ConditionalNodeData = {
   width: number
   height: number
 }
+
+// ConditionalNode is used to render the conditional node
 export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
   const [open, setOpen] = React.useState(false)
 
@@ -82,32 +85,55 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
   )
 }
 
+// ConditionalFormInputs is used to define the user input for the conditional node
+type ConditionalFormInputs = {
+  name: string
+  criteria: string
+  compvalue: number
+}
+
+// ConditionalForm is used to capture the user input for the conditional node
 function ConditionalForm({ className }: React.ComponentProps<'form'>) {
+  const { register, handleSubmit, control } = useForm<ConditionalFormInputs>()
+  const onSubmit: SubmitHandler<ConditionalFormInputs> = (data) =>
+    console.log(data)
+
   return (
-    <form className={cn('grid items-start gap-4', className)}>
+    <form
+      className={cn('grid items-start gap-4', className)}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="grid w-full gap-2">
         <Label htmlFor="name">Component Name</Label>
-        <Input type="text" id="name" />
+        <Input type="text" id="name" {...register('name')} />
       </div>
       <div className="flex w-full items-center justify-center gap-4">
         <div className="w-full">
           <Label htmlFor="criteria">Comparation Criteria</Label>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Comparation Criteria" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=">">{`>`}</SelectItem>
-              <SelectItem value=">=">{`>=`}</SelectItem>
-              <SelectItem value="<">{`<`}</SelectItem>
-              <SelectItem value="<=">{`<=`}</SelectItem>
-              <SelectItem value="==">{`==`}</SelectItem>
-            </SelectContent>
-          </Select>
+          {/* Controller is used to capture the user input in the form for this
+          specific input field (Select) */}
+          <Controller
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Comparation Criteria" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value=">">{`>`}</SelectItem>
+                  <SelectItem value=">=">{`>=`}</SelectItem>
+                  <SelectItem value="<">{`<`}</SelectItem>
+                  <SelectItem value="<=">{`<=`}</SelectItem>
+                  <SelectItem value="==">{`==`}</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+            name="criteria"
+            control={control}
+          />
         </div>
         <div className="w-full">
           <Label htmlFor="compvalue">Comparation Value</Label>
-          <Input type="number" id="compvalue" />
+          <Input type="number" id="compvalue" {...register('compvalue')} />
         </div>
       </div>
       <Button type="submit" className="bg-cyan-500 hover:bg-cyan-400">
