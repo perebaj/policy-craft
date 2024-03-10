@@ -25,7 +25,7 @@ export function DecisionNode({ data }: NodeProps<DecisionNodeData>) {
           position={Position.Top}
           isConnectable={false}
         />
-        <p className="font-medium">{'Decision'}</p>
+        <p className="font-medium">{'Decision False'}</p>
       </div>
     </NodeWrapper>
   )

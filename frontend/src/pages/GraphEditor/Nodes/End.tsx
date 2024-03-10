@@ -24,7 +24,7 @@ export function EndNode({ data }: NodeProps<EndNodeData>) {
           position={Position.Top}
           isConnectable={false}
         />
-        <p className="font-medium">{'End'}</p>
+        <p className="text-center text-xs font-medium">{'Decision true'}</p>
       </div>
     </NodeWrapper>
   )
