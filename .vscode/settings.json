@@ -9,5 +9,6 @@
         "./frontend"
     ],
     // The python interpreter path is important here to IDEs recognize the correct paths and packages
-    "python.defaultInterpreterPath": "./backend/.venv/bin/python"
+    "python.defaultInterpreterPath": "./backend/.venv/bin/python",
+    "editor.formatOnSaveMode": "file",
 }

@@ -10,7 +10,7 @@ services:
         PYTHON_VERSION: ${PYTHON_VERSION}
         POETRY_VERSION: ${POETRY_VERSION}
     environment:
-      POLICYCRAFT_POSTGRES_URL: postgres://postgres:postgres@postgres:5432/contractus?sslmode=disable
+      POLICYCRAFT_POSTGRES_URL: postgres://postgres:postgres@postgres:5432/policycraft?sslmode=disable
     volumes:
       - .:/app/src
     ports:

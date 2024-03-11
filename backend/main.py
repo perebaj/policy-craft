@@ -1,9 +1,15 @@
 from typing import Union
 
 from fastapi import FastAPI
+from postgres.db import connect
 
 app = FastAPI()
 
 @app.get("/")
-def read_root() -> Union[str, int]:
-    return "Hello, world! 2"
+async def read_root():
+    aconn = await connect()
+    async with aconn.cursor() as acur:
+        result = await acur.execute("SELECT 1")
+        await result.fetchone()
+        print(result._rowcount)
+        return {"row_count": result._rowcount}
