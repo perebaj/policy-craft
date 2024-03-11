@@ -6,7 +6,7 @@ if postgres_url is None:
     raise ValueError("POLICYCRAFT_POSTGRES_URL must be set")
 
 """
-connect return a async connection to the postgres database
+connect is the starting point to connect to the postgres database
 @return a async connection to the postgres database
 """
 async def connect() -> psycopg.AsyncConnection:
