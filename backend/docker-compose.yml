@@ -9,6 +9,9 @@ services:
       args:
         GO_VERSION: $GO_VERSION
         GOLANGCI_LINT_VERSION: $GOLANGCI_LINT_VERSION
+    environment:
+      POLICY_CRAFT_POSTGRES_URL: postgres://postgres:postgres@postgres:5432/policycraft?sslmode=disable
+    # create a volume pointing to the source code to enable hot-reloading inside the container
     volumes:
       - .:/app/src
     command: go run ./cmd/policycraft
