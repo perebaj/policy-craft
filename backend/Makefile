@@ -10,6 +10,11 @@ image=$(base_image):$(version)
 devimage=policy-craft
 devrun=docker run -it --rm -v $(PWD):/app $(devimage)
 
+## Run test | will run all files with test_*.py or *_test.py
+.PHONY: test
+test:
+	poetry run pytest
+
 ## Build the service image
 .PHONY: image
 image:
