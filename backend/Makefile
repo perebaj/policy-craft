@@ -62,11 +62,15 @@ dev/start:
 		docker-compose up -d; \
 	fi
 
-## Stop containers
+## Stop containers. If volumes=true is provided, volumes will be cleaned when stopping
 .PHONY: dev/stop
 dev/stop:
 	@echo "Stopping development server..."
-	@docker-compose down
+	@if [ "$(volumes)" = "true" ]; then \
+		docker-compose down --volumes; \
+	else \
+		docker-compose down; \
+	fi
 
 ## Clean containers, images and volumes
 .PHONY: dev/clean
