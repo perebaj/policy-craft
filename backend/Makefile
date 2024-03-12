@@ -10,6 +10,11 @@ image=$(base_image):$(version)
 devimage=policy-craft
 devrun=docker run -it --rm -v $(PWD):/app $(devimage)
 
+## Run test | will run all files with test_*.py or *_test.py
+.PHONY: test
+test:
+	poetry run pytest
+
 ## Build the service image
 .PHONY: image
 image:
@@ -57,11 +62,15 @@ dev/start:
 		docker-compose up -d; \
 	fi
 
-## Stop containers
+## Stop containers. If volumes=true is provided, volumes will be cleaned when stopping
 .PHONY: dev/stop
 dev/stop:
 	@echo "Stopping development server..."
-	@docker-compose down
+	@if [ "$(volumes)" = "true" ]; then \
+		docker-compose down --volumes; \
+	else \
+		docker-compose down; \
+	fi
 
 ## Clean containers, images and volumes
 .PHONY: dev/clean

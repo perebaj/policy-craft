@@ -10,7 +10,7 @@ services:
         PYTHON_VERSION: ${PYTHON_VERSION}
         POETRY_VERSION: ${POETRY_VERSION}
     environment:
-      # to use postgres and asyncpq, we need to set it up in the DB URL
+      # to use postgres and asyncpg, we need to set it up the url driver as well: postgresql+asyncpg
       POLICYCRAFT_POSTGRES_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/policycraft
     volumes:
       - .:/backend

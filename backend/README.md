@@ -6,7 +6,7 @@ Obs: `make dev/stop` to stop the backend.
 
 # How to run the tests and linters
 
-Run `make dev/test` to run the tests. Or `make dev/lint` to run the linter. Simple as that.
+Run `make dev/test` to run the tests. Or `make dev/lint` to run the linter. Simple as that..
 
 # How to start to develop locally
 

@@ -21,4 +21,4 @@ RUN poetry install --no-dev --no-interaction
 
 EXPOSE 8000
 
-COPY . /backend
+COPY . .
