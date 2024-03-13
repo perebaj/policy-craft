@@ -32,6 +32,10 @@ type Policy struct {
 	Criteria string `json:"criteria" db:"criteria"`
 	// Value is the value that the policy will use to compare.
 	Value int `json:"value" db:"value"`
+	// SuccessCase is the boolean that will be used to compare the result of the policy
+	SuccessCase bool `json:"success_case" db:"success_case"`
+	// Priority is the priority of the policy. The lower the number, the higher the priority.
+	Priority int `json:"priority" db:"priority"`
 	// UpdatedAt is the time when the policy was updated.
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
@@ -39,9 +43,16 @@ type Policy struct {
 // SavePolicy save a policy in the database. If the policy already exists, it will be updated.
 func (s *Storage) SavePolicy(policy policycraft.Policy) error {
 	_, err := s.db.NamedExec(`
-		INSERT INTO policies (id, name, criteria, value) VALUES (:id, :name, :criteria, :value)
+		INSERT INTO policies (id, name, criteria, value, success_case, priority) VALUES (:id, :name, :criteria, :value, :success_case, :priority)
 		ON CONFLICT (id) DO UPDATE SET name = :name, criteria = :criteria, value = :value
 	`, policy)
 
 	return err
+}
+
+// Policies returns all the policies in the database.
+func (s *Storage) Policies() ([]Policy, error) {
+	var policies []Policy
+	err := s.db.Select(&policies, "SELECT * FROM policies ORDER BY priority DESC")
+	return policies, err
 }

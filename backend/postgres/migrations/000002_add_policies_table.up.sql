@@ -3,6 +3,8 @@ CREATE TABLE policies (
   name VARCHAR(255) NOT NULL,
   criteria VARCHAR(255) NOT NULL,
   value INTEGER NOT NULL,
+  success_case BOOLEAN NOT NULL,
+  priority INTEGER NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 

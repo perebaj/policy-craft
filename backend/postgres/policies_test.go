@@ -88,10 +88,12 @@ func TestStorageSavePolicy(t *testing.T) {
 	storage := postgres.NewStorage(db)
 	stringUUID := uuid.NewString()
 	policy := policycraft.Policy{
-		ID:       stringUUID,
-		Name:     "policy 1",
-		Criteria: ">",
-		Value:    1,
+		ID:          stringUUID,
+		Name:        "policy 1",
+		Criteria:    ">",
+		Value:       1,
+		SuccessCase: true,
+		Priority:    1,
 	}
 
 	err := storage.SavePolicy(policy)
@@ -105,24 +107,29 @@ func TestStorageSavePolicy(t *testing.T) {
 		t.Fatalf("error getting count of policies: %v", err)
 	}
 
-	if len(got) != 1 {
-		t.Fatalf("expected 1 policy, got %d", len(got))
-	}
-
 	UUID, err := uuid.Parse(policy.ID)
 	if err != nil {
 		t.Fatalf("error parsing policy ID: %v", err)
 	}
-	assert(t, got[0].ID, UUID)
-	assert(t, got[0].Name, policy.Name)
-	assert(t, got[0].Criteria, policy.Criteria)
-	assert(t, got[0].Value, policy.Value)
+	if len(got) == 1 {
+		assert(t, got[0].ID, UUID)
+		assert(t, got[0].Name, policy.Name)
+		assert(t, got[0].Criteria, policy.Criteria)
+		assert(t, got[0].Value, policy.Value)
+		assert(t, got[0].Priority, policy.Priority)
+		assert(t, got[0].SuccessCase, policy.SuccessCase)
+	} else {
+		t.Fatalf("expected 1 policy, got %d", len(got))
+
+	}
 
 	policy2 := policycraft.Policy{
-		ID:       stringUUID,
-		Name:     "policy 1",
-		Criteria: "<",
-		Value:    2,
+		ID:          stringUUID,
+		Name:        "policy 1",
+		Criteria:    "<",
+		Value:       2,
+		SuccessCase: true,
+		Priority:    1,
 	}
 
 	err = storage.SavePolicy(policy2)
@@ -142,10 +149,16 @@ func TestStorageSavePolicy(t *testing.T) {
 		assert(t, got2[0].Name, policy2.Name)
 		assert(t, got2[0].Criteria, policy2.Criteria)
 		assert(t, got2[0].Value, policy2.Value)
-		if got2[0].UpdatedAt.Before(got[0].UpdatedAt) {
-			t.Errorf("expected updated_at to be after %v, got %v", got2[0].UpdatedAt, got[0].UpdatedAt)
-		}
+		assert(t, got2[0].UpdatedAt.After(got[0].UpdatedAt), true)
+		assert(t, got2[0].Priority, policy2.Priority)
+		assert(t, got2[0].SuccessCase, policy2.SuccessCase)
+	} else {
+		t.Fatalf("expected 1 policy, got %d", len(got))
 	}
+}
+
+func intToPtr(i int) *int {
+	return &i
 }
 
 // assert is a helper function to comaare the expected value with the result of the test.

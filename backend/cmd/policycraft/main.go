@@ -60,7 +60,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /policies", api.SavePolicyHandler(storage))
-
+	mux.HandleFunc("GET /policies", api.ListPoliciesHandler(storage))
 	slog.Info("starting server", "port", cfg.PORT)
 
 	err = http.ListenAndServe(":"+cfg.PORT, mux)
