@@ -16,7 +16,7 @@ import (
 type MockStorage struct{}
 
 // SavePolicy is a mock implementation of the SavePolicy method
-func (m *MockStorage) SavePolicy(policy policycraft.Policy) error {
+func (m *MockStorage) SavePolicy(_ policycraft.Policy) error {
 	return nil
 }
 
@@ -25,7 +25,7 @@ func NewMockStorage() *MockStorage {
 	return &MockStorage{}
 }
 
-func TestCreatePolicyHandler(t *testing.T) {
+func TestSavePolicyHandler(t *testing.T) {
 	tests := []struct {
 		name     string
 		policy   interface{}
@@ -69,7 +69,7 @@ func TestCreatePolicyHandler(t *testing.T) {
 	}
 
 	db := NewMockStorage()
-	handler := api.CreatePolicyHandler(db)
+	handler := api.SavePolicyHandler(db)
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

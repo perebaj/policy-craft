@@ -3,6 +3,8 @@ version: "3.8"
 services:
   policycraft:
     image: policycraft:dev
+    ports:
+      - 8080:8080
     build:
       context: .
       dockerfile: ./Dockerfile.dev

@@ -59,7 +59,7 @@ func main() {
 	storage := postgres.NewStorage(db)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /policies", api.CreatePolicyHandler(storage))
+	mux.HandleFunc("POST /policies", api.SavePolicyHandler(storage))
 
 	slog.Info("starting server", "port", cfg.PORT)
 

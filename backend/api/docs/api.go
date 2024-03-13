@@ -1,3 +1,4 @@
+// Package api provides the handlers for the API endpoints
 package api
 
 import (
@@ -13,7 +14,8 @@ type Storage interface {
 	SavePolicy(policy policycraft.Policy) error
 }
 
-func CreatePolicyHandler(db Storage) http.HandlerFunc {
+// SavePolicyHandler returns a http.HandlerFunc that receive a policy and save it to the database
+func SavePolicyHandler(db Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var policy policycraft.Policy
 		err := json.NewDecoder(r.Body).Decode(&policy)
