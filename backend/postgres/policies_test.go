@@ -1,8 +1,6 @@
 //go:build integration
 // +build integration
 
-// go: build integration
-
 // using build tag to separate integration tests from unit tests. In that way, we can reduce the time of the test some specific part of the code.
 package postgres_test
 

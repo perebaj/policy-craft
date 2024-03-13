@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/perebaj/policycraft"
-	"github.com/perebaj/policycraft/postgres"
 )
 
 // MockStorage is a mock implementation of the Storage interface
@@ -20,7 +19,7 @@ func (m *MockStorage) SavePolicy(_ policycraft.Policy) error {
 	return nil
 }
 
-func (m *MockStorage) Policies() ([]postgres.Policy, error) {
+func (m *MockStorage) Policies() ([]policycraft.Policy, error) {
 	return nil, nil
 }
 
@@ -145,6 +144,49 @@ func TestPolicyValidateCriteria(t *testing.T) {
 			}
 			if err := p.validateCriteria(); (err != nil) != tt.wantErr {
 				t.Errorf("Policy.ValidateCriteria() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestSendErr(t *testing.T) {
+	tests := []struct {
+		name     string
+		msg      string
+		code     int
+		expected int
+	}{
+		{
+			name:     "Bad Request",
+			msg:      "You made a bad request",
+			code:     http.StatusBadRequest,
+			expected: http.StatusBadRequest,
+		},
+		{
+			name:     "Internal Server Error",
+			msg:      "Test message",
+			code:     http.StatusInternalServerError,
+			expected: http.StatusInternalServerError,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			sendErr(w, test.msg, test.code)
+
+			if w.Code != test.expected {
+				t.Fatalf("expected status code %d, got %d", test.expected, w.Code)
+			}
+
+			var errMsg ErrMsg
+			err := json.Unmarshal(w.Body.Bytes(), &errMsg)
+			if err != nil {
+				t.Fatalf("failed to unmarshal error message: %v", err)
+			}
+
+			if errMsg.Msg != test.msg {
+				t.Fatalf("expected error message %s, got %s", test.msg, errMsg.Msg)
 			}
 		})
 	}

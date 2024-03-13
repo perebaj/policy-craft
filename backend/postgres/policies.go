@@ -51,8 +51,8 @@ func (s *Storage) SavePolicy(policy policycraft.Policy) error {
 }
 
 // Policies returns all the policies in the database.
-func (s *Storage) Policies() ([]Policy, error) {
-	var policies []Policy
-	err := s.db.Select(&policies, "SELECT * FROM policies ORDER BY priority ASC")
+func (s *Storage) Policies() ([]policycraft.Policy, error) {
+	var policies []policycraft.Policy
+	err := s.db.Select(&policies, "SELECT id, name, criteria, value, success_case, priority FROM policies ORDER BY priority ASC")
 	return policies, err
 }
