@@ -4,9 +4,11 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
 	"time"
 
+	api "github.com/perebaj/policycraft/api/docs"
 	"github.com/perebaj/policycraft/postgres"
 )
 
@@ -22,6 +24,7 @@ type Config struct {
 }
 
 func main() {
+	// Load the configuration from the environment variables.
 	cfg := Config{
 		PORT:     getEnvWithDefault("PORT", "8080"),
 		LogLevel: getEnvWithDefault("LOG_LEVEL", "INFO"),
@@ -52,6 +55,19 @@ func main() {
 			slog.Error("failed to close database", "error", err)
 		}
 	}()
+
+	storage := postgres.NewStorage(db)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("POST /policies", api.CreatePolicyHandler(storage))
+
+	slog.Info("starting server", "port", cfg.PORT)
+
+	err = http.ListenAndServe(":"+cfg.PORT, mux)
+	if err != nil {
+		slog.Error("failed to start server", "error", err)
+		os.Exit(1)
+	}
 }
 
 // setUpLog initialize the logger.

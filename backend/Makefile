@@ -11,7 +11,7 @@ image=perebaj
 # to enable the tracking of the service version, we can use the git commit hash
 version=$(shell git rev-parse --short HEAD)
 
-## run all tests. Usage `make test` or `make test testcase="TestFunctionName"` to run an isolated tests
+## run the unit tests. Usage `make test` or `make test testcase="TestFunctionName"` to run an isolated tests
 .PHONY: test
 test:
 	if [ -n "$(testcase)" ]; then \
@@ -20,7 +20,7 @@ test:
 		go test ./... -timeout 10s -race; \
 	fi
 
-## Run all tests including the integration tests (requires docker up and running). Usage `make integration-test` or `make integration-test testcase="TestFunctionName"` to run an isolated tests
+## Run the integration-tests (requires docker up and running). Usage `make integration-test` or `make integration-test testcase="TestFunctionName"` to run an isolated tests
 .PHONY: integration-test
 integration-test:
 	if [ -n "$(testcase)" ]; then \
