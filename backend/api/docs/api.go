@@ -33,9 +33,10 @@ type Policy struct {
 	SuccessCase *bool `json:"success_case,omitempty"`
 	// Priority is the priority of the policy. The lower the number, the higher the priority.
 	Priority *int `json:"priority,omitempty"`
+	// IMPORTANT: The pointer fields were chosen to be able to differentiate between the absence of the field and the zero value of the field.
 }
 
-// validateCriteria checks if the criteria is valid.
+// validateCriteria checks if the criteria field is valid.
 func (p *Policy) validateCriteria() error {
 	switch p.Criteria {
 	case ">", "<", ">=", "<=", "==":
