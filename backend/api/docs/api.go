@@ -74,12 +74,12 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 		var policy Policy
 		err := json.NewDecoder(r.Body).Decode(&policy)
 		if err != nil {
-			http.Error(w, "failed to decode request body", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		err = policy.Validate()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			sendErr(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -94,7 +94,8 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 
 		err = db.SavePolicy(p)
 		if err != nil {
-			http.Error(w, "failed to save policy", http.StatusInternalServerError)
+			slog.Error("failed to save policy", "error", err)
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 	}
@@ -106,14 +107,15 @@ func ListPoliciesHandler(db Storage) http.HandlerFunc {
 		policies, err := db.Policies()
 		if err != nil {
 			slog.Error("failed to get policies", "error", err)
-			http.Error(w, "failed to get policies", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
 		//convert the policies to response body
 		policiesByte, err := json.Marshal(policies)
 		if err != nil {
-			http.Error(w, "failed to marshal policies", http.StatusInternalServerError)
+			slog.Error("failed to marshal policies", "error", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -131,20 +133,21 @@ func ExecutionEngineHandler(db Storage) http.HandlerFunc {
 		var e policycraft.Execution
 		err := json.NewDecoder(r.Body).Decode(&e)
 		if err != nil {
-			http.Error(w, "failed to decode request body", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		policies, err := db.Policies()
 		if err != nil {
-			http.Error(w, "failed to get policies", http.StatusInternalServerError)
+			slog.Error("failed to get policies", "error", err)
+			sendErr(w, "failed to get policies", http.StatusInternalServerError)
 			return
 		}
 
 		decision, err := e.Evaluate(policies)
 		if err != nil {
 			slog.Error("failed to evaluate policies", "error", err)
-			http.Error(w, "failed to evaluate policies: "+err.Error(), http.StatusInternalServerError)
+			sendErr(w, "failed to evaluate policies "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -154,4 +157,23 @@ func ExecutionEngineHandler(db Storage) http.HandlerFunc {
 			_, _ = w.Write([]byte(fmt.Sprintf(`{"decision": %t}`, decision)))
 		}()
 	}
+}
+
+// ErrMsg is the struct that represents the error message in the API.
+type ErrMsg struct {
+	Msg string `json:"msg"`
+}
+
+// sendErr send a error message as a response
+func sendErr(w http.ResponseWriter, msg string, code int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+
+	errMsg := ErrMsg{Msg: msg}
+	errMsgBytest, err := json.Marshal(errMsg)
+	if err != nil {
+		http.Error(w, "failed to marshal error message", http.StatusInternalServerError)
+		return
+	}
+	w.Write(errMsgBytest)
 }

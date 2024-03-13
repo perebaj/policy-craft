@@ -148,3 +148,46 @@ func TestPolicyValidateCriteria(t *testing.T) {
 		})
 	}
 }
+
+func TestSendErr(t *testing.T) {
+	tests := []struct {
+		name     string
+		msg      string
+		code     int
+		expected int
+	}{
+		{
+			name:     "Bad Request",
+			msg:      "You made a bad request",
+			code:     http.StatusBadRequest,
+			expected: http.StatusBadRequest,
+		},
+		{
+			name:     "Internal Server Error",
+			msg:      "Test message",
+			code:     http.StatusInternalServerError,
+			expected: http.StatusInternalServerError,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			sendErr(w, test.msg, test.code)
+
+			if w.Code != test.expected {
+				t.Fatalf("expected status code %d, got %d", test.expected, w.Code)
+			}
+
+			var errMsg ErrMsg
+			err := json.Unmarshal(w.Body.Bytes(), &errMsg)
+			if err != nil {
+				t.Fatalf("failed to unmarshal error message: %v", err)
+			}
+
+			if errMsg.Msg != test.msg {
+				t.Fatalf("expected error message %s, got %s", test.msg, errMsg.Msg)
+			}
+		})
+	}
+}
