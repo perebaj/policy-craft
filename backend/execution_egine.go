@@ -1,3 +1,4 @@
+// Package policycraft ...
 // execution_engine.go gather the logic for evaluating policies with given data.
 package policycraft
 
@@ -38,7 +39,7 @@ func (e *Execution) Evaluate(policies []Policy) (bool, error) {
 	}
 
 	// Observations:
-	// 1. It's expected taht the custom field value is always an int, so we can safely cast it to int
+	// 1. It's expected that the custom field value is always an int, so we can safely cast it to int
 	// 2. We are assuming the policies are ordered by the priority, so we can iterate over them safely
 	for _, policy := range policies {
 		switch policy.Criteria {

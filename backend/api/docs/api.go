@@ -125,6 +125,7 @@ func ListPoliciesHandler(db Storage) http.HandlerFunc {
 	}
 }
 
+// ExecutionEngineHandler returns a http.HandlerFunc that receive a custom fields and evaluate the policies
 func ExecutionEngineHandler(db Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var e policycraft.Execution
