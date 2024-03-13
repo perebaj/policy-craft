@@ -30,7 +30,7 @@ func main() {
 		LogLevel: getEnvWithDefault("LOG_LEVEL", "INFO"),
 		LogType:  getEnvWithDefault("LOG_TYPE", "json"),
 		Postgres: postgres.Config{
-			URL:             os.Getenv("POLICYCRAFT_POSTGRES_URL"),
+			URL:             os.Getenv("POLICY_CRAFT_POSTGRES_URL"),
 			MaxOpenConns:    10,
 			MaxIdleConns:    5,
 			ConnMaxIdleTime: 1 * time.Minute,
