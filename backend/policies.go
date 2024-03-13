@@ -4,16 +4,14 @@ package policycraft
 
 import (
 	"fmt"
-
-	"github.com/google/uuid"
 )
 
 // Policy is the struct that will hold the policy data that it's being received from the client.
 type Policy struct {
-	ID       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Criteria string    `json:"criteria"`
-	Value    int       `json:"value"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Criteria string `json:"criteria"`
+	Value    int    `json:"value"`
 }
 
 // ValidateCriteria checks if the criteria is valid.

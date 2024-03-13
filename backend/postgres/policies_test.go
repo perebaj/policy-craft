@@ -38,7 +38,7 @@ func OpenDB(t *testing.T) *sqlx.DB {
 	if err != nil {
 		t.Fatalf("error connecting to Postgres: %v", err)
 	}
-	// The timeout here is a
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	err = db.PingContext(ctx)
@@ -81,15 +81,14 @@ func OpenDB(t *testing.T) *sqlx.DB {
 	return testDB
 }
 
-// TestSavePolicy test the SavePolicy method from the Storage struct.
 func TestStorageSavePolicy(t *testing.T) {
 	db := OpenDB(t)
 	defer db.Close()
 
 	storage := postgres.NewStorage(db)
-	uuidPolicy := uuid.New()
+	stringUUID := uuid.NewString()
 	policy := policycraft.Policy{
-		ID:       uuidPolicy,
+		ID:       stringUUID,
 		Name:     "policy 1",
 		Criteria: ">",
 		Value:    1,
@@ -110,13 +109,17 @@ func TestStorageSavePolicy(t *testing.T) {
 		t.Fatalf("expected 1 policy, got %d", len(got))
 	}
 
-	assert(t, got[0].ID, policy.ID)
+	UUID, err := uuid.Parse(policy.ID)
+	if err != nil {
+		t.Fatalf("error parsing policy ID: %v", err)
+	}
+	assert(t, got[0].ID, UUID)
 	assert(t, got[0].Name, policy.Name)
 	assert(t, got[0].Criteria, policy.Criteria)
 	assert(t, got[0].Value, policy.Value)
 
 	policy2 := policycraft.Policy{
-		ID:       uuidPolicy,
+		ID:       stringUUID,
 		Name:     "policy 1",
 		Criteria: "<",
 		Value:    2,
@@ -135,7 +138,7 @@ func TestStorageSavePolicy(t *testing.T) {
 
 	// Validating if the updated_at field was updated when the same policy was saved, but with different data.
 	if len(got) == 1 {
-		assert(t, got2[0].ID, policy2.ID)
+		assert(t, got2[0].ID, UUID)
 		assert(t, got2[0].Name, policy2.Name)
 		assert(t, got2[0].Criteria, policy2.Criteria)
 		assert(t, got2[0].Value, policy2.Value)
@@ -145,6 +148,7 @@ func TestStorageSavePolicy(t *testing.T) {
 	}
 }
 
+// assert is a helper function to comaare the expected value with the result of the test.
 func assert(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if got != want {
