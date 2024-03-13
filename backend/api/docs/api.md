@@ -17,6 +17,33 @@ curl -i -X POST http://localhost:8080/policies \
         "id": "a43cafc3-87ad-4e13-9e42-fbd7113b7e82",
         "name": "Sample Policy",
         "criteria": ">",
-        "value": 10
+        "value": 10,
+        "success_case": true,
+        "priority": 1
         }'
+```
+
+## GET policies/
+
+Returns a list of all policies.
+
+curl request example:
+
+```bash
+curl -i -X GET http://localhost:8080/policies
+```
+
+Response example:
+
+```json
+[
+    {
+        "id": "a43cafc3-87ad-4e13-9e42-fbd7113b7e82",
+        "name": "Sample Policy",
+        "criteria": ">",
+        "value": 10,
+        "success_case": true,
+        "priority": 1
+    }
+]
 ```

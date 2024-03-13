@@ -7,6 +7,7 @@ gopkg=$(devimage)-gopkg
 gocache=$(devimage)-gocache
 devrun=docker-compose run --rm policycraft
 image=perebaj
+container=policycraft
 
 # to enable the tracking of the service version, we can use the git commit hash
 version=$(shell git rev-parse --short HEAD)
@@ -106,6 +107,11 @@ dev/stop:
 .PHONY: dev/cleanup
 dev/cleanup:
 	docker-compose down -v --remove-orphans --rmi all
+
+## Restart the container
+.PHONY: dev/restart
+dev/restart:
+	docker-compose restart $(container)
 
 ## Access the container
 dev:

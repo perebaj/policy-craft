@@ -76,8 +76,6 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 			return
 		}
 
-		slog.Info("policy", "policy", policy.Priority)
-
 		p := policycraft.Policy{
 			ID:          policy.ID,
 			Name:        policy.Name,
@@ -95,12 +93,13 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 	}
 }
 
-// ListPoliciesHandler returns a http.HandlerFunc that receive a policy id and return the policy from the database
+// ListPoliciesHandler returns a http.HandlerFunc that get all the policies from the database and return it as a response
 func ListPoliciesHandler(db Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		policies, err := db.Policies()
 		if err != nil {
-			http.Error(w, "failed to list policies", http.StatusInternalServerError)
+			slog.Error("failed to get policies", "error", err)
+			http.Error(w, "failed to get policies", http.StatusInternalServerError)
 			return
 		}
 
