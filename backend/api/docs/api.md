@@ -47,3 +47,18 @@ Response example:
     }
 ]
 ```
+
+# Execution Engine
+
+Endpoints for managing the execution engine.
+
+## POST execution-engine/
+
+```bash
+curl -i -X POST http://localhost:8080/execution-engine \
+     -H "Content-Type: application/json" \
+     -d '{
+        "age": 20,
+        "income": 1000
+     }'
+```

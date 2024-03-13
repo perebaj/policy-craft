@@ -23,7 +23,7 @@ func (e *Execution) Evaluate(policies []Policy) (bool, error) {
 	for _, policy := range policies {
 		_, ok := e.CustomFields[policy.Name]
 		if !ok {
-			return false, fmt.Errorf("value %s not found in custom fields", policy.Name)
+			return false, fmt.Errorf("value '%s' not found in custom fields", policy.Name)
 		}
 		// loading the policy name into a map to increse the performance of the next validation
 		policyMap[policy.Name] = true
@@ -33,7 +33,7 @@ func (e *Execution) Evaluate(policies []Policy) (bool, error) {
 	for key := range e.CustomFields {
 		_, ok := policyMap[key]
 		if !ok {
-			return false, fmt.Errorf("the %s doesn't exist in the policies", key)
+			return false, fmt.Errorf("the value '%s' doesn't exist in the policies", key)
 		}
 	}
 

@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/perebaj/policycraft"
-	"github.com/perebaj/policycraft/postgres"
 )
 
 // MockStorage is a mock implementation of the Storage interface
@@ -20,7 +19,7 @@ func (m *MockStorage) SavePolicy(_ policycraft.Policy) error {
 	return nil
 }
 
-func (m *MockStorage) Policies() ([]postgres.Policy, error) {
+func (m *MockStorage) Policies() ([]policycraft.Policy, error) {
 	return nil, nil
 }
 

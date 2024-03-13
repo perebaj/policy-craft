@@ -10,13 +10,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/perebaj/policycraft"
-	"github.com/perebaj/policycraft/postgres"
 )
 
 // Storage is the interface that wraps the postgres methods that iteract with the API
 type Storage interface {
 	SavePolicy(policy policycraft.Policy) error
-	Policies() ([]postgres.Policy, error)
+	Policies() ([]policycraft.Policy, error)
 }
 
 // Policy is the struct that represents the policy entity in the API.
@@ -122,6 +121,36 @@ func ListPoliciesHandler(db Storage) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		defer func() {
 			_, _ = w.Write(policiesByte)
+		}()
+	}
+}
+
+func ExecutionEngineHandler(db Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var e policycraft.Execution
+		err := json.NewDecoder(r.Body).Decode(&e)
+		if err != nil {
+			http.Error(w, "failed to decode request body", http.StatusBadRequest)
+			return
+		}
+
+		policies, err := db.Policies()
+		if err != nil {
+			http.Error(w, "failed to get policies", http.StatusInternalServerError)
+			return
+		}
+
+		decision, err := e.Evaluate(policies)
+		if err != nil {
+			slog.Error("failed to evaluate policies", "error", err)
+			http.Error(w, "failed to evaluate policies: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		defer func() {
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"decision": %t}`, decision)))
 		}()
 	}
 }
