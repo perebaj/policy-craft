@@ -157,11 +157,63 @@ func TestStorageSavePolicy(t *testing.T) {
 	}
 }
 
-func intToPtr(i int) *int {
-	return &i
+func TestStoragePolicies(t *testing.T) {
+	db := OpenDB(t)
+	defer db.Close()
+
+	policy := policycraft.Policy{
+		ID:          uuid.NewString(),
+		Name:        "policy 1",
+		Criteria:    ">",
+		Value:       1,
+		SuccessCase: false,
+		Priority:    1,
+	}
+
+	storage := postgres.NewStorage(db)
+	err := storage.SavePolicy(policy)
+	if err != nil {
+		t.Fatalf("error saving policy: %v", err)
+	}
+
+	policy2 := policycraft.Policy{
+		ID:          uuid.NewString(),
+		Name:        "policy 2",
+		Criteria:    "<",
+		Value:       2,
+		SuccessCase: true,
+		Priority:    2,
+	}
+
+	err = storage.SavePolicy(policy2)
+	if err != nil {
+		t.Fatalf("error saving policy: %v", err)
+	}
+
+	policies, err := storage.Policies()
+	if err != nil {
+		t.Fatalf("error getting policies: %v", err)
+	}
+
+	if len(policies) == 2 {
+		//Garanting that the policies are ordered by priority
+		assert(t, policies[0].Name, policy.Name)
+		assert(t, policies[0].Criteria, policy.Criteria)
+		assert(t, policies[0].Value, policy.Value)
+		assert(t, policies[0].Priority, policy.Priority)
+		assert(t, policies[0].SuccessCase, policy.SuccessCase)
+
+		assert(t, policies[1].Name, policy2.Name)
+		assert(t, policies[1].Criteria, policy2.Criteria)
+		assert(t, policies[1].Value, policy2.Value)
+		assert(t, policies[1].Priority, policy2.Priority)
+		assert(t, policies[1].SuccessCase, policy2.SuccessCase)
+	} else {
+		t.Fatalf("expected 2 policies, got %d", len(policies))
+	}
 }
 
-// assert is a helper function to comaare the expected value with the result of the test.
+// assert is a helper function to compare the expected value with the result of the test.
 func assert(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if got != want {

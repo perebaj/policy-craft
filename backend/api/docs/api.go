@@ -19,13 +19,20 @@ type Storage interface {
 	Policies() ([]postgres.Policy, error)
 }
 
+// Policy is the struct that represents the policy entity in the API.
 type Policy struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Value       *int   `json:"value,omitempty"`
-	Criteria    string `json:"criteria"`
-	SuccessCase *bool  `json:"success_case,omitempty"`
-	Priority    *int   `json:"priority,omitempty"`
+	// ID is the unique identifier for the policy.
+	ID string `json:"id"`
+	// Name is the name of the policy.
+	Name string `json:"name"`
+	// Value is the value that the policy will use to compare.
+	Value *int `json:"value,omitempty"`
+	// Criteria is the criteria that the policy will use to compare the value.
+	Criteria string `json:"criteria"`
+	// SuccessCase is the boolean that will be used to compare the result of the policy
+	SuccessCase *bool `json:"success_case,omitempty"`
+	// Priority is the priority of the policy. The lower the number, the higher the priority.
+	Priority *int `json:"priority,omitempty"`
 }
 
 // validateCriteria checks if the criteria is valid.
@@ -76,8 +83,6 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 			return
 		}
 
-		slog.Info("policy", "policy", policy.Priority)
-
 		p := policycraft.Policy{
 			ID:          policy.ID,
 			Name:        policy.Name,
@@ -95,12 +100,13 @@ func SavePolicyHandler(db Storage) http.HandlerFunc {
 	}
 }
 
-// ListPoliciesHandler returns a http.HandlerFunc that receive a policy id and return the policy from the database
+// ListPoliciesHandler returns a http.HandlerFunc that get all the policies from the database and return it as a response
 func ListPoliciesHandler(db Storage) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		policies, err := db.Policies()
 		if err != nil {
-			http.Error(w, "failed to list policies", http.StatusInternalServerError)
+			slog.Error("failed to get policies", "error", err)
+			http.Error(w, "failed to get policies", http.StatusInternalServerError)
 			return
 		}
 
@@ -113,6 +119,8 @@ func ListPoliciesHandler(db Storage) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write(policiesByte)
+		defer func() {
+			_, _ = w.Write(policiesByte)
+		}()
 	}
 }
