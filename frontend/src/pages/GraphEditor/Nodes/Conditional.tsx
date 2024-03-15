@@ -3,6 +3,8 @@ import { DiamondSvg } from 'assets/Diamond'
 import * as React from 'react'
 import { SubmitHandler, useForm, UseFormReturn } from 'react-hook-form'
 import { Handle, NodeProps, Position } from 'reactflow'
+import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
@@ -18,6 +20,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -45,15 +48,40 @@ export type ConditionalNodeData = {
 const formSchema = z.object({
   name: z.string().min(1),
   criteria: z.string().min(1),
-  compValue: z.number(),
+  value: z.number(),
+  success_case: z.boolean(),
 })
 
 // ConditionalNode is used to render the conditional node
 export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
   const [open, setOpen] = React.useState(false)
   async function onSubmit(value: z.infer<typeof formSchema>) {
-    console.log(value)
-    setOpen(false)
+    // Saving the policy into the API
+    const url =
+      'https://65ebcd1d43ce16418934461f.mockapi.io/api/v1/policies/policies'
+    try {
+      const id = uuidv4()
+      const priority = 0
+      const valueWithId = { ...value, id, priority }
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(valueWithId),
+      })
+      toast.promise(response.json(), {
+        loading: 'Creating policy...',
+        success: 'Policy created',
+        error: 'Policy not created',
+      })
+    } catch (error) {
+      toast.error('Policy not created. Internal Error')
+    } finally {
+      // Closing the dialog component
+      setOpen(false)
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,7 +89,8 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
     defaultValues: {
       name: '',
       criteria: '',
-      compValue: 0,
+      value: 0,
+      success_case: true,
     },
   })
 
@@ -76,7 +105,6 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
           }}
         >
           <DialogTrigger asChild>
-            {/* <Button variant="outline">Edit </Button> */}
             <div className="relative flex h-full w-full items-center justify-center   p-9 text-center text-[12px]">
               <div className="group-hover-focus:cursor-pointer absolute left-0 top-0 z-0 h-full w-full text-cyan-400 hover:cursor-pointer group-hover:text-cyan-400/80 [&>svg]:stroke-cyan-500">
                 <DiamondSvg strokeWidth={4} />
@@ -172,14 +200,14 @@ function ConditionalForm({
           <div className="w-full">
             <FormField
               control={form.control}
-              name="compValue"
+              name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="CompValue">Comparation Value</FormLabel>
+                  <FormLabel htmlFor="value">Comparation Value</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      id="CompValue"
+                      id="value"
                       {...field}
                       onChange={(event) => field.onChange(+event.target.value)}
                     />
@@ -190,6 +218,35 @@ function ConditionalForm({
             />
           </div>
         </div>
+        <FormField
+          control={form.control}
+          name="success_case"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="name">Decision on Success</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value.toString()}
+                  onValueChange={(value: string) =>
+                    field.onChange(value === 'true')
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="On success decision" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">{`true`}</SelectItem>
+                    <SelectItem value="false">{`false`}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>
+                The response that will be returned if the condition was true
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="bg-cyan-500 hover:bg-cyan-400">
           Save changes
         </Button>
