@@ -5,6 +5,7 @@ import routes from '@pages'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 const router = createBrowserRouter(routes, {
   future: {
@@ -12,9 +13,9 @@ const router = createBrowserRouter(routes, {
     v7_normalizeFormMethod: true,
   },
 })
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <Toaster richColors />
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </React.StrictMode>,
 )
