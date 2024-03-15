@@ -56,9 +56,9 @@ const formSchema = z.object({
 export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
   const [open, setOpen] = React.useState(false)
   async function onSubmit(value: z.infer<typeof formSchema>) {
+    // Saving the policy into the API
     const url =
       'https://65ebcd1d43ce16418934461f.mockapi.io/api/v1/policies/policies'
-    setOpen(false)
     try {
       const id = uuidv4()
       const priority = 0
@@ -78,6 +78,9 @@ export function ConditionalNode({ data }: NodeProps<ConditionalNodeData>) {
       })
     } catch (error) {
       toast.error('Policy not created. Internal Error')
+    } finally {
+      // Closing the dialog component
+      setOpen(false)
     }
   }
 
